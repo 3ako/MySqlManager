@@ -10,29 +10,37 @@ public class MySqlManager {
     private ArrayList<MySqlServer> servers = new ArrayList<MySqlServer>();
 
     //Конструкторы
-    public MySqlServer createServer(String ip, String user, String password){
-        return this.createServer(ip,user,password,3306);
+    public MySqlServer registerServer(String ip, String user, String password){
+        return this.registerServer(ip,user,password,3306);
     }
-    public MySqlServer createServer(String ip, String user, String password,Boolean connect){
-        return this.createServer(ip,user,password,3306,connect);
+    public MySqlServer registerServer(String ip, String user, String password, Boolean connect){
+        return this.registerServer(ip,user,password,3306,connect);
     }
-    public MySqlServer createServer(String ip, String user, String password,int port){
-       return this.createServer(ip,user,password,port,false);
+    public MySqlServer registerServer(String ip, String user, String password, int port){
+       return this.registerServer(ip,user,password,port,false);
     }
-    public MySqlServer createServer(String ip, String user, String password,int port,Boolean connect){
+    public MySqlServer registerServer(String ip, String user, String password, int port, Boolean connect){
         MySqlServer server = new MySqlServer(ip,user,password,port,connect);
         servers.add(server);
         return server;
     }
 
+    public Boolean removeServer(MySqlServer server){
+        for (MySqlServer s:this.getServers()){
+            if (server == s){
+                if (s.isConnect())
+                    s.disconnect();
+                this.getServers().remove(s);
+                return true;
+            }
+        }
+        return false;
+    }
     //Геттеры
     public EventManager getEventManager() {
         return eventManager;
     }
     public ArrayList<MySqlServer> getServers() {
-        return servers;
-    }
-    public ArrayList<MySqlServer> getAllServers(){
         return servers;
     }
 

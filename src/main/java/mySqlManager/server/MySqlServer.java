@@ -18,7 +18,7 @@ public class MySqlServer {
     private String selectedBase;
     private ServerEventManager serverEventManager;
     private Ui ui;
-    
+
     //Конструкторы
     public MySqlServer(String ip, String user, String password, int port, Boolean connect){
         this.ip = ip;
@@ -30,9 +30,6 @@ public class MySqlServer {
             this.connect();
         }
     }
-    public MySqlServer(String ip, String user, String password, int port){
-        this(ip,user,password,port,false);
-    }
 
     //Базы
     public ArrayList<MySqlDatabase> registerAllDatabases(){
@@ -40,7 +37,7 @@ public class MySqlServer {
 //            Statement stmt = connection.createStatement();
             ResultSet rs = getResultSet("Show Databases");
             while(rs.next()) {
-                this.registerBase(rs.getString(1));
+                this.registerDatabase(rs.getString(1));
             }
             return this.databases;
         }
@@ -49,7 +46,7 @@ public class MySqlServer {
             return null;
         }
     }
-    public MySqlDatabase registerBase(String name){
+    public MySqlDatabase registerDatabase(String name){
         MySqlDatabase base = new MySqlDatabase(name,this);
         databases.add(base);
         this.getEventManager().notify(new ServerRegisterBase(this,base));
@@ -106,14 +103,16 @@ public class MySqlServer {
     }
 
     //Запросы
-    private void prepareStatement(final String sql) {
+    public int executeUpdate(final String sql) {
         try {
             final PreparedStatement ps = this.getConnection().prepareStatement(sql);
-            ps.executeUpdate();
+            int strings = ps.executeUpdate();
             ps.close();
+            return strings;
         }
         catch (SQLException e) {
             e.printStackTrace();
+            return 0;
         }
     }
     public Object getResult(final String sql) {

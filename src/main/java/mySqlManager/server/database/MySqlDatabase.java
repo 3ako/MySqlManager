@@ -16,15 +16,11 @@ public class MySqlDatabase {
         this.name = databaseName;
     }
 
-    private void prepareStatement(final String sql) {
-        try {
-            final PreparedStatement ps = this.getServer().getConnection().prepareStatement(sql);
-            ps.executeUpdate();
-            ps.close();
+    private Integer executeUpdate(final String sql) {
+        if (this.getServer().getSelectBase() == null || this.getServer().getSelectBase().getName()!=this.getName()) {
+            this.getServer().selectBase(this);
         }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
+        return this.getServer().executeUpdate(sql);
     }
 
     public Boolean isSelect(){
