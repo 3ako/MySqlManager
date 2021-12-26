@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class Main {
     public static void main (String[] args) throws SQLException {
         MySqlManager manager = new MySqlManager();
-        MySqlServer mySqlServer = manager.createServer("116.202.131.195", "admin", "f0UeZD5g8HUkWPwIf2bF0sqJx6lZbm7k");
+        MySqlServer mySqlServer = manager.createServer("...", "", "");
         mySqlServer.startUi();
         mySqlServer.connect();
         mySqlServer.registerAllDatabases();
